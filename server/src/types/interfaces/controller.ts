@@ -1,9 +1,9 @@
-import { Request,Response } from "express";
+import { FastifyRequest,FastifyReply } from "fastify";
 
 export interface IController {
-    create(req : Request,res : Response);
-    getAll(req : Request,res : Response);
-    getById(req : Request,res : Response);
-    updateById(req : Request,res : Response);
-    deleteById(req : Request,res : Response);
+    create(req : FastifyRequest,res : FastifyReply);
+    getAll(req : FastifyRequest,res : FastifyReply);
+    getById(req : FastifyRequest,res : FastifyReply);
+    updateById(req : FastifyRequest,res : FastifyReply);
+    deleteById(req : FastifyRequest,res : FastifyReply);
 }
