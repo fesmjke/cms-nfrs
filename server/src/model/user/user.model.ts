@@ -1,22 +1,22 @@
-import { UserEntity } from "../../types/interfaces/entity";
+import { IUser } from "../../types/interfaces/user";
 
 class UserModel {
     // connection;
-    private _users : UserEntity[];
+    private _users : IUser[];
 
     constructor(){
         this._users = [];
     }
 
-    create(user : UserEntity) : UserEntity {
-        console.log(user);
+    create(user : IUser) : IUser {
         this._users.push(user);
+        user.id = "1";
         return user;
     }
-    getAll() : UserEntity[] {
+    getAll() : IUser[] {
         return this._users;
     }
-    getById(id : string | number) : UserEntity | object {
+    getById(id : string | number) : IUser | object {
         this._users.forEach(user => {
             if(user.id === id){
                 return user;
@@ -26,7 +26,7 @@ class UserModel {
         });
         return {"id" : id,"status" : "not found"};
     }
-    updateById(id : string | number,updatedUser : UserEntity) : UserEntity | object {
+    updateById(id : string | number,updatedUser : IUser) : IUser | object {
         let counter = 0;
         this._users.forEach(user => {
             counter +=1;
