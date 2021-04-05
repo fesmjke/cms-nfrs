@@ -1,19 +1,27 @@
-import express from "express";
-import bodyParser from "body-parser";
+import Fastify,{FastifyInstance,RouteOptions} from "fastify";
+import Joi from "joi";
 
 class ApplicationService {
-    private _app : express.Application;
-
+    private _app : FastifyInstance;
+    
     constructor() {
-        this._app = express();
-        this._app.use(bodyParser.json())
+        this._app = Fastify({logger : true});
+        this._app.setValidatorCompiler(({schema})=>data=> Joi.compile(schema).validate(data));
+        // this._app.setSchemaErrorFormatter((errors,data) => {
+        //     console.error({err : errors},'Validation failed');
+        //     console.error(data);
+        //     return new Error()
+        // })
+        // this._app.addContentTypeParser() // later
     }
 
-    public setRouter(router : express.Router) {
-        this._app.use(router);
+    public setRouter(router : RouteOptions[]) {
+        router.forEach(route => {
+            this._app.route(route); 
+        }); // check later
     }
 
-    public getApp() : express.Application {
+    public getApp() : FastifyInstance {
         return this._app;
     }
 }
