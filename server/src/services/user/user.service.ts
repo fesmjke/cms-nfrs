@@ -1,5 +1,5 @@
 import {userModel,UserModel} from "../../model/user/user.model";
-import { UserEntity } from "../../types/interfaces/entity";
+import { IUser } from "../../types/interfaces/user";
 import { IService } from "../../types/interfaces/service";
 
 class UserService implements IService{
@@ -9,16 +9,16 @@ class UserService implements IService{
         this._userModel = userModel;
     }
 
-    create(user : UserEntity) : UserEntity {
+    create(user : IUser) : IUser {
         return this._userModel.create(user);
     }
-    getAll() : UserEntity[] {
+    getAll() : IUser[] {
         return this._userModel.getAll();
     }
-    getById(id : string | number) : UserEntity | object{
+    getById(id : string | number) : IUser | object{
         return this._userModel.getById(id);
     }
-    updateById(id : string | number,updatedUser : UserEntity) : UserEntity | object {
+    updateById(id : string | number,updatedUser : IUser) : IUser | object {
         return this._userModel.updateById(id,updatedUser);
     }
     deleteById(id : string | number) : object {
