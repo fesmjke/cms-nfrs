@@ -4,7 +4,7 @@ import UserRouter from "./router/user/user.router";
 
 const app = new ApplicationService();
 
-app.setRouter(UserRouter);
+app.setRouter(UserRouter.getRouters());
 
 const httpServer = new HttpServer(app.getApp(),{port : 3000});
 
