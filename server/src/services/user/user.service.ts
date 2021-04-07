@@ -9,21 +9,21 @@ class UserService implements IService{
         this._userModel = userModel;
     }
 
-    create(user : IUser) : IUser {
-        return this._userModel.create(user);
+    create = async (user : IUser) : Promise<IUser> => {
+        return await this._userModel.create(user);
     }
-    getAll() : IUser[] {
-        return this._userModel.getAll();
-    }
-    getById(id : string | number) : IUser | object{
-        return this._userModel.getById(id);
-    }
-    updateById(id : string | number,updatedUser : IUser) : IUser | object {
-        return this._userModel.updateById(id,updatedUser);
-    }
-    deleteById(id : string | number) : object {
-        return this._userModel.deleteById(id);
-    }
+    // getAll() : IUser[] {
+    //     return this._userModel.getAll();
+    // }
+    // getById(id : string | number) : IUser | object{
+    //     return this._userModel.getById(id);
+    // }
+    // updateById(id : string | number,updatedUser : IUser) : IUser | object {
+    //     return this._userModel.updateById(id,updatedUser);
+    // }
+    // deleteById(id : string | number) : object {
+    //     return this._userModel.deleteById(id);
+    // }
 }
 
 const userService = new UserService(userModel)
