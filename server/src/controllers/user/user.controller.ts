@@ -12,7 +12,7 @@ class UserController implements IController {
     }
 
     public create = async (request : PostUserRequest,reply : FastifyReply) => {
-        const createdUser = this._userService.create(request.body);
+        const createdUser = await this._userService.create(request.body);
         reply.code(201).header('Content-Type','application/json; charset=utf-8').send(createdUser);
     }
 
