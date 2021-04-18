@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import { IUser } from "../../types/interfaces/user";
 import { User } from "../db/schema/user.schema";
 
@@ -6,35 +7,22 @@ class UserModel {
     create = async (user : IUser) : Promise<IUser> => {
         return await User.create(user);
     }
-    // getAll() : IUser[] {
-    //     return this._users;
-    // }
-    // getById(id : string | number) : IUser | object {
-    //     this._users.forEach(user => {
-    //         if(user.id === id){
-    //             return user;
-    //         }else{
-    //             return {"id" : id,"status" : "not found"}
-    //         }
-    //     });
-    //     return {"id" : id,"status" : "not found"};
-    // }
-    // updateById(id : string | number,updatedUser : IUser) : IUser | object {
-    //     let counter = 0;
-    //     this._users.forEach(user => {
-    //         counter +=1;
-    //         if(user.id === id){
-    //             this._users[counter] = updatedUser;
-    //             return updatedUser;
-    //         }else{
-    //             return {"id" : id,"status" : "not updated"}
-    //         }
-    //     })
-    //     return {"id" : id,"status" : "not updated"};
-    // }
-    // deleteById(id : string | number) : object {
-    //     return {"id" : id,"status" : "not worked"};
-    // }
+    
+    getAll = async () : Promise<IUser[]> => {
+        return await User.find();
+    }
+
+    getById = async (id : string | number | ObjectId) : Promise<IUser | null> => {
+        return await User.findById({_id : id});
+    }
+
+    updateById = async (id : string | number,updatedUser : object) : Promise<IUser | null> => {
+        return await User.findByIdAndUpdate(id,updatedUser,{new : true,omitUndefined : true});
+    }
+
+    deleteById = async (id : string | number | ObjectId) : Promise<IUser | null> => {
+        return await User.findByIdAndDelete({_id : id});
+    }
 }
 
 const userModel = new UserModel();
