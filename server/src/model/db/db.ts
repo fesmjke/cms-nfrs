@@ -15,7 +15,8 @@ export default class DataBase {
         this._connection_config = this._db_config_loader.loadSync();
         this._connection_url = this._connection_config.host + '/' + this._connection_config.database;
         this._connection = mongoose.createConnection(this._connection_url,
-                                                    {useCreateIndex : true,useNewUrlParser : true,useUnifiedTopology : true})
+                                                    {useCreateIndex : true,useNewUrlParser : true,useUnifiedTopology : true,
+                                                        useFindAndModify : false})
     }
 
     
@@ -29,7 +30,7 @@ export default class DataBase {
     }
 
     public connect(){
-        mongoose.connect(this._connection_url,{useCreateIndex : true,useNewUrlParser : true,useUnifiedTopology : true},(err) => {
+        mongoose.connect(this._connection_url,{useCreateIndex : true,useNewUrlParser : true,useUnifiedTopology : true,useFindAndModify : false},(err) => {
             if(err){
                 console.log("MONGO ERROR ",err.message)
             }else{
