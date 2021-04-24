@@ -1,4 +1,5 @@
 import Fastify,{FastifyInstance,RouteOptions} from "fastify";
+import { authService } from "../services/auth/auth.service";
 import Joi from "joi";
 
 class ApplicationService {
@@ -7,12 +8,7 @@ class ApplicationService {
     constructor() {
         this._app = Fastify({logger : true});
         this._app.setValidatorCompiler(({schema})=>data=> Joi.compile(schema).validate(data));
-        // this._app.setSchemaErrorFormatter((errors,data) => {
-        //     console.error({err : errors},'Validation failed');
-        //     console.error(data);
-        //     return new Error()
-        // })
-        // this._app.addContentTypeParser() // later
+        this._app.addHook('onRequest',authService.authCheck)
     }
 
     public setRouter(router : RouteOptions[]) {
