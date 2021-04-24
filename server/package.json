@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "dotenv": "^8.2.0",
     "fastify": "^3.14.1",
     "joi": "^17.4.0",
     "mongoose": "^5.12.3"
