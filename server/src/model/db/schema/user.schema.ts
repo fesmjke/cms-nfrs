@@ -1,9 +1,9 @@
 import { model, Schema } from "mongoose";
-import { IUserDoc } from "../docs/user.doc";
+import { IUserDoc,IUserModel } from "../docs/user.doc";
 import bcrypt from "bcrypt";
 
 
-const UserSchema : Schema = new Schema({
+const UserSchema = new Schema<IUserDoc,IUserModel>({
     user_name : { type : String,required : true,unique: [true,'That username is taken.'] },
     name : {type : String,required : true},
     last_name : {type : String,required : true},
@@ -13,6 +13,7 @@ const UserSchema : Schema = new Schema({
     roles : { type : Array,required : true}
 },{
     timestamps : true,
+    versionKey : false
 }).pre("save", function(this : IUserDoc,next){
     const user = this;
     user.roles.push('user')
@@ -30,5 +31,10 @@ const UserSchema : Schema = new Schema({
         })
     })
 });
+
+UserSchema.methods.verifyPassword = function(this : IUserDoc,candidatePassword : string) {
+    const isMatch = bcrypt.compare(candidatePassword, this.password);
+    return isMatch
+}
 
 export const User = model<IUserDoc>("User",UserSchema);
