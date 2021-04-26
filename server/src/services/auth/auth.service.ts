@@ -31,7 +31,7 @@ class AuthService implements IAuthService{
     private userVerifyPass = async (user : IUserDoc,password : string) : Promise<boolean> => {
         return await user.verifyPassword(password);
     }
-    
+
     public authCheck = async (request : FastifyRequest,reply : FastifyReply) => {
         if(request.headers.authorization){
             const auth = request.headers.authorization.split('.');
@@ -55,6 +55,8 @@ class AuthService implements IAuthService{
             }else{
                 reply.code(403).send({message : "permission denied",reason : "auth and user is not same,or not valid"})
             }
+        }else{
+            reply.code(401).send({message : "permission denied",reason : "Unauthorized"})
         }
     }
 
