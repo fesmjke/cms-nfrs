@@ -31,9 +31,6 @@ export default class App extends React.Component{
                 <Link to="/about">About</Link>
               </li>
               <li>
-                <Link to="/users">Users</Link>
-              </li>
-              <li>
                 <Link to="/signin">Sign In</Link>
               </li>
               <li>
@@ -48,9 +45,6 @@ export default class App extends React.Component{
             <Route path="/about">
               <About />
             </Route>
-            <Route path="/users">
-              <Users />
-            </Route>
             <Route path="/signin">
               <SignIn />
             </Route>
@@ -63,4 +57,3 @@ export default class App extends React.Component{
     );
   }
 }
-

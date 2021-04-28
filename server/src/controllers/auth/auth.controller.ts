@@ -12,11 +12,11 @@ class AuthController implements IAuthController {
     }
 
     logIn = async (request : AuthLogInRequest,reply : FastifyReply) => {
-        return await this._authService.logIn({email : request.body.email,password : request.body.password}); // rewrite all cases;
+        return await this._authService.logIn({email : request.body.email,password : request.body.password},reply);
     }
 
     logOut = async (request : AuthLogOutRequest,reply : FastifyReply) => {
-        return await this._authService.logOut({authId : request.body.authId}); // rewrite all cases;
+        return await this._authService.logOut({authId : request.body.authId},reply);
     }
 }
 

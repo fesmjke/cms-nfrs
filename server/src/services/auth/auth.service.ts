@@ -31,7 +31,7 @@ class AuthService implements IAuthService{
     private userVerifyPass = async (user : IUserDoc,password : string) : Promise<boolean> => {
         return await user.verifyPassword(password);
     }
-    
+
     public authCheck = async (request : FastifyRequest,reply : FastifyReply) => {
         if(request.headers.authorization){
             const auth = request.headers.authorization.split('.');
@@ -55,10 +55,12 @@ class AuthService implements IAuthService{
             }else{
                 reply.code(403).send({message : "permission denied",reason : "auth and user is not same,or not valid"})
             }
+        }else{
+            reply.code(401).send({message : "permission denied",reason : "Unauthorized"})
         }
     }
 
-    logIn = async (logIn : ILogIn) : Promise<IAuth | null | object> => {
+    logIn = async (logIn : ILogIn,reply : FastifyReply) : Promise<IAuth | null | object> => {
         const {email,password} = logIn;
         const user : IUserDoc | null = await this.userExistence(email);
         
@@ -67,26 +69,24 @@ class AuthService implements IAuthService{
             if(result){
                 const authAnswer = await this._authModel.getById(user.id);
                 if(authAnswer){
-                    const logIn = await this._authModel.logIn(user.id);
-                    if(logIn){
-                        return logIn;
-                    }else{
-                        return {"message" : "password or email is not correct"}
-                    }
+                    await this._authModel.logOut(authAnswer.id);
+                    return reply.code(401).send({error : "true",code : "401","message" : "User already loggined."})
                 }else{
                     return await this._authModel.create(user.id);
                 }
             }else{
-                return {"message" : "password or email is not correct"}
+                return reply.code(401).send({error : "true",code : "401","message" : "That email and password combination is incorrect."})
             }
         }else{
-            return {"message" : "user with this email is not exists"}
+            return reply.code(401).send({error : "true",code : "401","message" : "That email and password combination is incorrect."})
         }
     }
     
     // check later
-    logOut = async (logOut : ILogOut) : Promise<IAuth | null> => {
-        return await this._authModel.logOut(logOut.authId);
+    logOut = async (logOut : ILogOut,reply : FastifyReply) : Promise<IAuth | null> => {
+        const logOutResult = await this._authModel.logOut(logOut.authId);
+        if(logOutResult) return reply.code(200).send({error : "false",result : logOutResult,message : "Logouted!"})
+        else return reply.code(401).send({error : "true",code : "401","message" : "User already logouted"})
     }
 }
 

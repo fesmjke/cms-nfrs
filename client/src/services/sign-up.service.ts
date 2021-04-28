@@ -16,8 +16,8 @@ class SignUpService implements ISignUp {
             })
         }
         try {
-            const result = await fetch('auth/login',requestOptions);
-            console.log(result);
+            const result = await fetch('api/user',requestOptions);
+            console.log(await result.json());
         }catch(err){
             console.log(err)
         }
