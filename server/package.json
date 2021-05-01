@@ -19,6 +19,8 @@
     "bcrypt": "^5.0.1",
     "dotenv": "^8.2.0",
     "fastify": "^3.14.1",
+    "fastify-multer": "^2.0.2",
+    "fastify-static": "^4.0.1",
     "joi": "^17.4.0",
     "mongoose": "^5.12.3"
   },

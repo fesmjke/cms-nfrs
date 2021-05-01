@@ -7,3 +7,8 @@ export interface IController {
     updateById(req : FastifyRequest,res : FastifyReply);
     deleteById(req : FastifyRequest,res : FastifyReply);
 }
+
+export interface IProductController extends IController {
+    addReview(req : FastifyRequest,res : FastifyReply);
+    addActivationCodes(req : FastifyRequest,res : FastifyReply);
+}
