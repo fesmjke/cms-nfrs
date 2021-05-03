@@ -1,59 +1,127 @@
-import React from "react";
+import React, { Dispatch } from "react";
+import { connect, ConnectedProps } from "react-redux";
 import { BrowserRouter as Router,
   Link,
   Switch,
-  Route } from "react-router-dom";
+  Route, 
+  Redirect} from "react-router-dom";
 import SignIn from "../components/sign-in";
 import SignUp from "../components/sign-up";
+import Categories from "../components/categories";
+import AuthBar from "../components/auth-bar";
+import UserBar from "../components/user/user-bar"
+import UserProfile from "../components/user/profile";
+import Products from "../components/product";
+import LeftSide from "../components/left-side";
+import { AuthActions, AuthActionTypes, IAuthAnswer, IAuthAnswerError } from "../store/reducers/auth/types";
+import { RootState } from "../store/types";
 
-function Home() {
-  return <h2>Home</h2>;
-}
+import { categories24,home24,info24,products24,user24 } from "../images";
 
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
-}
-
-export default class App extends React.Component{
+class App extends React.Component<AppComponentProps,{}>{
+  constructor(props : AppComponentProps){
+    super(props);
+  }
+  
   render(){
     return (
       <Router>
+        <header className="px-3 py-2 bg-dark text-white">
+          <div className="container">
+            <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+              <a className="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"><img src={home24} alt=""/></a>
+              <ul className="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                <li>
+                  <Link className="nav-link text-secondary" to="/"><img src={home24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Home</Link>
+                </li>
+                <li>
+                  <Link className="nav-link text-secondary" to="/about"><img src={info24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>About</Link>
+                </li>
+                <li>
+                  <Link className="nav-link text-secondary" to="/categories"><img src={categories24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Categories</Link>
+                </li>
+                <li>
+                  <Link className="nav-link text-secondary" to="/products"><img src={products24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Products</Link>
+                </li>
+                <UserBar/>
+                <AuthBar/>
+              </ul>
+            </div>
+          </div>
+        </header>
         <div>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/about">About</Link>
-              </li>
-              <li>
-                <Link to="/signin">Sign In</Link>
-              </li>
-              <li>
-                <Link to="/signup">Sign Up</Link>
-              </li>
-            </ul>
-          <hr />
           <Switch>
             <Route exact path="/">
-              <Home />
+              <h3> Home </h3>
             </Route>
             <Route path="/about">
-              <About />
+              <h3> About </h3>
             </Route>
-            <Route path="/signin">
-              <SignIn />
+            <Route path="/categories"> 
+              <Categories/>
             </Route>
-            <Route path="/signup">
-              <SignUp />
+            <Route path="/products/category/:category" render={(props) => <Products {...props}/>}> 
             </Route>
+            <Route path="/products/:id" render={(props) => <Products {...props}/>}> 
+            </Route>
+            <Route path="/products" render={(props) => <Products {...props}/>}> 
+            </Route>
+            
+            {
+              this.props.status === "GUEST" ? 
+              <React.Fragment>
+                <Route path="/signin">
+                  <SignIn />
+                </Route>
+                <Route path="/signup">
+                  <SignUp/>
+                </Route>
+                <Route path="/logout">
+                  <Redirect to="/"/>
+                 </Route>
+                 <Route path="/profile">
+                   <Redirect to="/"></Redirect>
+                 </Route>
+              </React.Fragment>
+               : this.props.token && this.props.role === "user" ? <React.Fragment>
+                 <Route path="/profile" >
+                   <UserProfile />
+                 </Route>
+                 <Route path="/signin">
+                    <Redirect to="/"/>
+                  </Route>
+                  <Route path="/signup">
+                    <Redirect to="/"/>
+                  </Route>
+                  <Route path="/logout">
+                    <Redirect to="/"/>
+                  </Route>
+               </React.Fragment> : 
+               <React.Fragment>
+                <Redirect to="/"></Redirect>
+               </React.Fragment>
+            }
           </Switch>
         </div>
       </Router>
     );
   }
 }
+
+const mapDispatchToProps = (dispatch : Dispatch<AuthActions>) => {
+  return {
+      logIn : () => dispatch({type : AuthActionTypes.AUTH_LOG_IN}),
+      logInSuccess : (authAnswer : IAuthAnswer) => dispatch({type : AuthActionTypes.AUTH_LOG_IN_SUCCESS,authAnswer : authAnswer}),
+      logInFail : (authAnswerError : IAuthAnswerError) => dispatch({type : AuthActionTypes.AUTH_LOG_IN_FAIL,authAnswer : authAnswerError})
+  }
+}
+
+const mapStateToProps = (state : RootState) => {
+  return state.auth;
+}
+
+const connector = connect(mapStateToProps,mapDispatchToProps);
+
+type AppComponentProps = ConnectedProps<typeof connector>;
+
+export default connector(App);
