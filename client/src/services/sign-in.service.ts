@@ -1,22 +1,29 @@
-import {ISignIn} from "../types/interfaces/services";
+import {ILogInError, ILogInOk, ISignIn} from "../types/interfaces/services";
+
+type JSONResponce = {
+    body?: ILogInOk,
+    error? : ILogInError
+}
 
 export default class SignInService implements ISignIn {
-    logIn = async () => {
+    logIn = async (email : string,password : string) : Promise<JSONResponce> => {
         const requestOptions = {
             method : "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body : JSON.stringify({
-                "email" : "qweasdzcc123@example.com",
-	            "password" : "213"
+                "email" : `${email}`,
+	            "password" : `${password}`
             })
         }
-        try {
-            const result = await fetch('auth/login',requestOptions);
-            console.log(await result.json());
-        }catch(err){
-            console.log(err)
+
+        const responce = await (await fetch('auth/login',requestOptions)).json();
+        
+        if("error" in responce){
+            return {body : undefined,error : responce}
         }
+        
+        return {body : responce,error : undefined};
     }
 }

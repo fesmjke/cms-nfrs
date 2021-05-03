@@ -1,17 +1,21 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { Dispatch } from "react";
+import { connect, ConnectedProps } from "react-redux";
 import SignUpService from "../../services/sign-up.service";
+import { AuthActions, AuthActionTypes, IAuthAnswer, IAuthAnswerError } from "../../store/reducers/auth/types";
+import { RootState } from "../../store/types";
 import { ISignUp } from "../../types/interfaces/services";
 import { IStateSignUp } from "../../types/interfaces/sign-up";
 
 
 
-export default class SignUp extends React.Component<any,IStateSignUp> {
+class SignUp extends React.Component<SignUpComponentProps,IStateSignUp> {
     private _signUpService : ISignUp;
 
-    constructor(props : any){
+    constructor(props : SignUpComponentProps){
         super(props);
         
+        const auth = props;
+
         this.state = {
             user_name : '',
             name : '',
@@ -55,42 +59,48 @@ export default class SignUp extends React.Component<any,IStateSignUp> {
 
     render(){
         return(
-            <div className="container p-5" style={{maxWidth : "700px"}}>
-                <h2 >Sign Up</h2>
+            <div className="container p-1" style={{maxWidth : "700px"}}>
+                <h2 >Sign Up {this.props.status}</h2>
                     <form>
                         <div className="row">
                             <div className="col">
                                 <input name="user_name" className="form-control" placeholder="Enter your user name" type="text" onChange={this.handleUserNameChange}/>
+                                <div className="form-text pt-1">User name should have at least 4 letters.</div>
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row">
                             <div className="col">
                                 <input name="name" className="form-control" placeholder="Enter your name" type="text" onChange={this.handleNameChange}/>
+                                <div className="form-text pt-1">Your real name.</div>
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row">
                             <div className="col">
                                 <input name="last_name" className="form-control" placeholder="Enter your last name" type="text" onChange={this.handleLastNameChange}/>
+                                <div className="form-text pt-1">Your real family name.</div>
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row">
                             <div className="col">
                                 <input name="phone_number" className="form-control" placeholder="Enter your phone number" type="tel" onChange={this.handlePhoneNumberChange} />
+                                <div className="form-text pt-1">Your phone number.</div>
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row">
                             <div className="col">
                                 <input name="email" className="form-control" placeholder="Enter your email" type="email" onChange={this.handleEmailChange}/>
+                                <div className="form-text pt-1">Your email address.</div>
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row">
                             <div className="col">
                                 <input name="password" className="form-control" placeholder="Enter your password" type="password" onChange={this.handlePasswordChange}/>
+                                <div className="form-text pt-1">Password should have at least 4 letters.</div>
                             </div>
                         </div>
                         <span></span>
@@ -100,3 +110,22 @@ export default class SignUp extends React.Component<any,IStateSignUp> {
         )
     }
 }
+
+
+const mapDispatchToProps = (dispatch : Dispatch<AuthActions>) => {
+    return {
+        logIn : () => dispatch({type : AuthActionTypes.AUTH_LOG_IN}),
+        logInSuccess : (authAnswer : IAuthAnswer) => dispatch({type : AuthActionTypes.AUTH_LOG_IN_SUCCESS,authAnswer : authAnswer}),
+        logInFail : (authAnswerError : IAuthAnswerError) => dispatch({type : AuthActionTypes.AUTH_LOG_IN_FAIL,authAnswer : authAnswerError})
+    }
+}
+
+const mapStateToProps = (state : RootState) => {
+    return state.auth;
+}
+
+const connector = connect(mapStateToProps,mapDispatchToProps);
+
+type SignUpComponentProps = ConnectedProps<typeof connector>;
+
+export default connector(SignUp);
