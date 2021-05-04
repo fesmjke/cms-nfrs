@@ -43,6 +43,12 @@ export type PostProductAddCodes = FastifyRequest<{
     }
 }>
 
+export type GetProductsByCategory = FastifyRequest<{
+    Params : {
+        id : string | ObjectId;
+    }
+}>
+
 export type UpdateProductRequest = FastifyRequest<{
     Body : IProductUpdate,
     Params : ProductRequestURL
