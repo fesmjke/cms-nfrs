@@ -10,6 +10,7 @@ class ProductRoute extends Route {
     */
      private getProductsRoute : RouteOptions;
      private getProductRoute : RouteOptions;
+     private getByCategoryId : RouteOptions;
      private postProductRoute : RouteOptions;
      private putProductRoute : RouteOptions;
      private deleteProductRoute : RouteOptions;
@@ -36,6 +37,7 @@ class ProductRoute extends Route {
         // later need to refactor
         this.getProductsRoute = { method : "GET",url : `/api/${this._rootLabel}`,handler : this._controller.getAll }
         this.getProductRoute = { method : "GET",url : `/api/${this._rootLabel}/:id`,handler : this._controller.getById }
+        this.getByCategoryId = {method : "GET",url : `/api/${this._rootLabel}/category/:id`,handler : productController.getProductsByCategory}
         this.postProductRoute = { method : "POST", 
             url : `/api/${this._rootLabel}`,
             preHandler: upload.single('product_image'), 
@@ -47,7 +49,7 @@ class ProductRoute extends Route {
     }
 
     public getRouters() : RouteOptions[] {
-        return [this.getProductsRoute,this.getProductRoute,this.postProductRoute,this.putProductRoute,this.deleteProductRoute,this.addReview,this.addActivationCodes]
+        return [this.getProductsRoute,this.getProductRoute,this.getByCategoryId,this.postProductRoute,this.putProductRoute,this.deleteProductRoute,this.addReview,this.addActivationCodes]
     }
 }
 

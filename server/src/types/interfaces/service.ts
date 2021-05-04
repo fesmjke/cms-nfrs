@@ -13,4 +13,5 @@ export interface IService{
 export interface IProductService extends IService {
     addReview(id : string | number | ObjectId,review : IReview) : Promise<IProduct | null>;
     addActivationCodes(id : string | number | ObjectId,codes : string[]) : Promise<IProduct | null>
+    getByCategoryId(id : string | ObjectId) : Promise<IProduct[]>;
 }

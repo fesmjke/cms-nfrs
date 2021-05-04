@@ -34,6 +34,10 @@ class ProductModel {
         }
     }
 
+    getByCategoryId = async (id : string | ObjectId) : Promise<IProduct[]> => {
+        return await Product.find({category : id})
+    }
+
     getAll = async () : Promise<IProduct[]> => {
         return await Product.find();
     }
