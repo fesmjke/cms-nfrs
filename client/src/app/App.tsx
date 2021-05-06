@@ -18,6 +18,9 @@ import { RootState } from "../store/types";
 
 import { cart24, categories24,home24,info24,products24,user24 } from "../images";
 import Cart from "../components/cart";
+import AdminBar from "../components/admin/admin-bar";
+import CreateCategoryPage from "../components/admin/create-category-page";
+import CreateProductPage from "../components/admin/create-product-page";
 
 class App extends React.Component<AppComponentProps,{}>{
   constructor(props : AppComponentProps){
@@ -52,6 +55,13 @@ class App extends React.Component<AppComponentProps,{}>{
               </ul>
             </div>
           </div>
+          {this.props.role === 'admin' ? <div className="container">
+          <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a className="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"></a>
+            <ul className="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+              <AdminBar/>
+            </ul></div>
+          </div> : null}
         </header>
         <div className="container">
           <Switch>
@@ -89,7 +99,14 @@ class App extends React.Component<AppComponentProps,{}>{
                    <Redirect to="/"></Redirect>
                  </Route>
               </React.Fragment>
-               : this.props.token && this.props.role === "user" ? <React.Fragment>
+               : this.props.token && this.props.role === "admin" ? <React.Fragment>
+               <Route path="/category-create">
+                     <CreateCategoryPage/>
+                   </Route>
+                   <Route path="/product-create">
+                    <CreateProductPage/>
+               </Route>
+             </React.Fragment> : this.props.token && this.props.role === "user" ? <React.Fragment>
                  <Route path="/profile" >
                    <UserProfile />
                  </Route>
