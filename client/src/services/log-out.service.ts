@@ -1,7 +1,6 @@
 
-
 export default class LogOutService {
-    logIn = async (authId : string) => {
+    logOut = async (authId : string) => {
         const requestOptions = {
             method : "POST",
             headers: {

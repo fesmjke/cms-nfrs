@@ -16,7 +16,11 @@ import LeftSide from "../components/left-side";
 import { AuthActions, AuthActionTypes, IAuthAnswer, IAuthAnswerError } from "../store/reducers/auth/types";
 import { RootState } from "../store/types";
 
-import { categories24,home24,info24,products24,user24 } from "../images";
+import { cart24, categories24,home24,info24,products24,user24 } from "../images";
+import Cart from "../components/cart";
+import AdminBar from "../components/admin/admin-bar";
+import CreateCategoryPage from "../components/admin/create-category-page";
+import CreateProductPage from "../components/admin/create-product-page";
 
 class App extends React.Component<AppComponentProps,{}>{
   constructor(props : AppComponentProps){
@@ -43,13 +47,23 @@ class App extends React.Component<AppComponentProps,{}>{
                 <li>
                   <Link className="nav-link text-secondary" to="/products"><img src={products24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Products</Link>
                 </li>
+                <li>
+                  <Link className="nav-link text-secondary" to="/cart"><img src={cart24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Cart</Link>
+                </li>
                 <UserBar/>
                 <AuthBar/>
               </ul>
             </div>
           </div>
+          {this.props.role === 'admin' ? <div className="container">
+          <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a className="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"></a>
+            <ul className="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+              <AdminBar/>
+            </ul></div>
+          </div> : null}
         </header>
-        <div>
+        <div className="container">
           <Switch>
             <Route exact path="/">
               <h3> Home </h3>
@@ -62,11 +76,13 @@ class App extends React.Component<AppComponentProps,{}>{
             </Route>
             <Route path="/products/category/:category" render={(props) => <Products {...props}/>}> 
             </Route>
-            <Route path="/products/:id" render={(props) => <Products {...props}/>}> 
+            <Route path="/product/:id" render={(props) => <Products {...props}/>}> 
             </Route>
             <Route path="/products" render={(props) => <Products {...props}/>}> 
             </Route>
-            
+            <Route path="/cart">
+              <Cart/>
+            </Route>
             {
               this.props.status === "GUEST" ? 
               <React.Fragment>
@@ -83,7 +99,14 @@ class App extends React.Component<AppComponentProps,{}>{
                    <Redirect to="/"></Redirect>
                  </Route>
               </React.Fragment>
-               : this.props.token && this.props.role === "user" ? <React.Fragment>
+               : this.props.token && this.props.role === "admin" ? <React.Fragment>
+               <Route path="/category-create">
+                     <CreateCategoryPage/>
+                   </Route>
+                   <Route path="/product-create">
+                    <CreateProductPage/>
+               </Route>
+             </React.Fragment> : this.props.token && this.props.role === "user" ? <React.Fragment>
                  <Route path="/profile" >
                    <UserProfile />
                  </Route>

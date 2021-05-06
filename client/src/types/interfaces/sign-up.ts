@@ -5,4 +5,9 @@ export interface IStateSignUp{
     phone_number : string;
     email : string;
     password : string;
+    error : {
+        message : string;
+        status : boolean;
+    };
+    success : string;
 }

@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { productService } from "../../services/product/product.service";
 import { IProductController } from "../../types/interfaces/controller";
 import { IProductService } from "../../types/interfaces/service";
-import { DeleteProductIdRequest, GetProductIdRequest, PostProductAddCodes, PostProductAddReviewRequest, PostProductRequest, UpdateProductRequest } from "../../types/requests/product";
+import { DeleteProductIdRequest, GetProductIdRequest, GetProductsByCategory, PostProductAddCodes, PostProductAddReviewRequest, PostProductRequest, UpdateProductRequest } from "../../types/requests/product";
 import { ErrorController } from "../error/error.controller";
 
 
@@ -36,6 +36,12 @@ class ProductController implements IProductController {
         const {id} = request.params;
         const result = await this._productService.addActivationCodes(id,request.body.codes);
         return result
+    }
+
+    getProductsByCategory = async (request : GetProductsByCategory,reply : FastifyReply) => {
+        const {id} = request.params;
+        const result = await this._productService.getByCategoryId(id);
+        return result;
     }
 
     getAll = async (request : FastifyRequest,reply : FastifyReply)  => {

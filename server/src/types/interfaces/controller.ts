@@ -11,4 +11,5 @@ export interface IController {
 export interface IProductController extends IController {
     addReview(req : FastifyRequest,res : FastifyReply);
     addActivationCodes(req : FastifyRequest,res : FastifyReply);
+    getProductsByCategory(req : FastifyRequest,res : FastifyReply);
 }

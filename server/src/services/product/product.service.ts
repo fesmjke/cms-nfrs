@@ -14,7 +14,7 @@ class ProductService implements IProductService{
     create = async (product : IProduct) : Promise<IProduct> => {
         return await this._productModel.create(product);
     }
-
+    
     addReview = async (id : string | number | ObjectId,review : IReview) : Promise<IProduct | null> => {
         console.log("review",review)
         return await this._productModel.addReview(id,review);
@@ -24,6 +24,10 @@ class ProductService implements IProductService{
         return await this._productModel.addActivationCodes(id,codes);
     }
     
+    getByCategoryId = async (id : string | ObjectId) : Promise<IProduct[]> => {
+        return await this._productModel.getByCategoryId(id);
+    }
+
     getAll = async () : Promise<IProduct[]> => {
         return await this._productModel.getAll();
     }
