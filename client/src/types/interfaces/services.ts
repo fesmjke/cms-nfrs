@@ -7,7 +7,7 @@ export interface ISignIn extends Service {
 }
 
 export interface ISignUp extends Service {
-    send() : object;
+    createUser(user : ICreateUser) : Promise<JSONResponce>;
 }
 
 export interface JSONResponce {
@@ -24,4 +24,13 @@ export interface ILogInError {
     error : string;
     code : string;
     message : string;
+}
+
+export interface ICreateUser {
+    user_name : string;
+    name : string;
+    last_name : string;
+    phone_number : string;
+    email : string;
+    password : string;
 }

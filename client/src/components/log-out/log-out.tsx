@@ -16,7 +16,8 @@ class LogOut extends React.Component<LogOutComponentProps>{
     
     private onClickLogOut = async (id : string) => {
         this.props.logOut();
-        this.props.logOutSuccess({id : "1",message : ""});
+        this._logOutService.logOut(this.props.token);
+        this.props.logOutSuccess({error : "false",id : "",message : ""})
     }
 
     render(){

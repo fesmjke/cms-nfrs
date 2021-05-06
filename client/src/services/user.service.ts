@@ -5,6 +5,11 @@ type JSONResponce = {
     error? : IUserLoadError
 }
 
+type JSONResponceOk = {
+    body : IUserLoad,
+    error? : IUserLoadError
+}
+
 export default class UserService {
     public loadUser = async (id : string,token : string,role : string) : Promise<JSONResponce> => {
         const requestOptions = {
@@ -29,5 +34,23 @@ export default class UserService {
 
         return {body : result,error : undefined}
         
+    }
+    public loadUserById = async (id : string) : Promise<JSONResponceOk> => {
+        const requestOptions = {
+            method : "GET",
+            headers : {
+                'Content-Type': 'application/json',
+            }
+        }
+
+        console.log(requestOptions)
+
+        const responce = await fetch(`/api/user/${id}`,requestOptions);
+
+        const codeStatus = responce.status;
+
+        const result = await responce.json();
+
+        return {body : result,error : undefined}
     }
 }

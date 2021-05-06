@@ -16,7 +16,8 @@ import LeftSide from "../components/left-side";
 import { AuthActions, AuthActionTypes, IAuthAnswer, IAuthAnswerError } from "../store/reducers/auth/types";
 import { RootState } from "../store/types";
 
-import { categories24,home24,info24,products24,user24 } from "../images";
+import { cart24, categories24,home24,info24,products24,user24 } from "../images";
+import Cart from "../components/cart";
 
 class App extends React.Component<AppComponentProps,{}>{
   constructor(props : AppComponentProps){
@@ -43,13 +44,16 @@ class App extends React.Component<AppComponentProps,{}>{
                 <li>
                   <Link className="nav-link text-secondary" to="/products"><img src={products24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Products</Link>
                 </li>
+                <li>
+                  <Link className="nav-link text-secondary" to="/cart"><img src={cart24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Cart</Link>
+                </li>
                 <UserBar/>
                 <AuthBar/>
               </ul>
             </div>
           </div>
         </header>
-        <div>
+        <div className="container">
           <Switch>
             <Route exact path="/">
               <h3> Home </h3>
@@ -62,11 +66,13 @@ class App extends React.Component<AppComponentProps,{}>{
             </Route>
             <Route path="/products/category/:category" render={(props) => <Products {...props}/>}> 
             </Route>
-            <Route path="/products/:id" render={(props) => <Products {...props}/>}> 
+            <Route path="/product/:id" render={(props) => <Products {...props}/>}> 
             </Route>
             <Route path="/products" render={(props) => <Products {...props}/>}> 
             </Route>
-            
+            <Route path="/cart">
+              <Cart/>
+            </Route>
             {
               this.props.status === "GUEST" ? 
               <React.Fragment>
