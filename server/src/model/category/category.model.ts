@@ -15,7 +15,7 @@ class CategoryModel {
         return await Category.findById({_id : id});
     }
 
-    updateById = async (id : string | number | ObjectId,updatedCategory : object) : Promise<ICategory | null> => {
+    updateById = async (id : string | number | ObjectId,updatedCategory : ICategory) : Promise<ICategory | null> => {
         return await Category.findByIdAndUpdate(id,updatedCategory,{new : true,omitUndefined : true});
     }
 
