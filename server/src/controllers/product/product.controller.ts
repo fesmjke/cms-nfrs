@@ -5,8 +5,6 @@ import { IProductService } from "../../types/interfaces/service";
 import { DeleteProductIdRequest, GetProductIdRequest, GetProductsByCategory, PostProductAddCodes, PostProductAddReviewRequest, PostProductRequest, UpdateProductRequest } from "../../types/requests/product";
 import { ErrorController } from "../error/error.controller";
 
-
-/// NOT TESTED, nothing WITH PRODUCT TESTED
 class ProductController implements IProductController {
     private _productService : IProductService;
     private _errorController;
