@@ -16,8 +16,11 @@ class ProductService implements IProductService{
     }
     
     addReview = async (id : string | number | ObjectId,review : IReview) : Promise<IProduct | null> => {
-        console.log("review",review)
         return await this._productModel.addReview(id,review);
+    }
+
+    getActivationsCodes = async (products : string[]) : Promise<string[]> => {
+        return await this._productModel.getActivationsCodes(products);
     }
 
     addActivationCodes = async (id : string | number | ObjectId,codes : string[]) : Promise<IProduct | null> => {

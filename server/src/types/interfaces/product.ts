@@ -10,7 +10,7 @@ export interface IProduct extends Entity {
     image_url : string;
     developer : string;
     reviewies : [IReview];
-    activation_code : [string];
+    activation_code : string[];
 }
 
 export interface IReview {
