@@ -13,10 +13,11 @@ import UserBar from "../components/user/user-bar"
 import UserProfile from "../components/user/profile";
 import Products from "../components/product";
 import LeftSide from "../components/left-side";
+import Home from "../components/home";
 import { AuthActions, AuthActionTypes, IAuthAnswer, IAuthAnswerError } from "../store/reducers/auth/types";
 import { RootState } from "../store/types";
 
-import { cart24, categories24,home24,info24,products24,user24 } from "../images";
+import { cart24, categories24,home24,info24,products24,user24,logo24 } from "../images";
 import Cart from "../components/cart";
 import AdminBar from "../components/admin/admin-bar";
 import CreateCategoryPage from "../components/admin/create-category-page";
@@ -33,7 +34,7 @@ class App extends React.Component<AppComponentProps,{}>{
         <header className="px-3 py-2 bg-dark text-white">
           <div className="container">
             <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-              <a className="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"><img src={home24} alt=""/></a>
+              <a className="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"><img src={logo24} alt=""/></a>
               <ul className="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                 <li>
                   <Link className="nav-link text-secondary" to="/"><img src={home24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Home</Link>
@@ -66,7 +67,7 @@ class App extends React.Component<AppComponentProps,{}>{
         <div className="container">
           <Switch>
             <Route exact path="/">
-              <h3> Home </h3>
+              <Home/>
             </Route>
             <Route path="/about">
               <h3> About </h3>

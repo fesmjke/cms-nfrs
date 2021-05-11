@@ -33,7 +33,7 @@ class Products extends React.Component<ProductsComponentProps,ProductsState>{
 
     createProducts = () => {
         return this.state.products.map((product : IProduct) => {
-            return <ProductItem title={product.title} image={product.image_url} price={product.price} id={product._id}/>
+            return <ProductItem discount={product.discount} title={product.title} image={product.image_url} price={product.price} id={product._id}/>
         })
     }
 

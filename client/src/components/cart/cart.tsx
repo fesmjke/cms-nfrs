@@ -12,6 +12,12 @@ interface CartState {
         user_name : string;
         email : string;
         phone_number : string;
+    },
+    payment : {
+        full_name : string;
+        credit_card_number : string;
+        card_expiration : string;
+        cvv : string;
     }
 }
 
@@ -26,6 +32,8 @@ class Cart extends React.Component<CartComponentProps,CartState>{
                 name : '',
                 phone_number : '',
                 user_name : ''
+            },payment : {
+                card_expiration : '',credit_card_number : '',cvv : '',full_name : ''
             }
         }
     }
@@ -51,6 +59,14 @@ class Cart extends React.Component<CartComponentProps,CartState>{
         //return priceList.reduce((acc,current) => acc += current)
     }
 
+    countTotalDiscount = () => {
+        const priceList = this.props.cart.cart.map((product) => {
+            return +product.discount
+       })
+       return this.props.cart.cart.length ? priceList.reduce((acc,value) => {return acc + value}) : null;
+       
+    }
+
     removeProductFromCart = (id : string) => {
         console.log("CLICKED")
         this.props.removeFromCart({id : id})
@@ -71,7 +87,7 @@ class Cart extends React.Component<CartComponentProps,CartState>{
                         <div className="align-self-center">
                             <h6>{product.title}</h6>
                         </div>
-                    <span className="text-muted align-self-center">{product.price} ₴</span>
+                    <span className="text-muted align-self-center">{product.discount ? +product.price - ((+product.price) * (+product.discount/100)) : product.price} ₴</span>
                     <button className="btn btn-sm" onClick={() => this.removeProductFromCart(product.id)}><img src={remove24} alt="" /></button>
                 </li>
             )
@@ -126,6 +142,7 @@ class Cart extends React.Component<CartComponentProps,CartState>{
     render(){
         const listOfProducts = this.createListOfProduct();
         const totalPrice = this.countTotalPrice();
+        const totalDiscount = this.countTotalDiscount();
 
         return(
             <div className="container mt-5">
@@ -143,7 +160,7 @@ class Cart extends React.Component<CartComponentProps,CartState>{
                             {listOfProducts.length ? listOfProducts : <div className="list-group-item d-flex justify-content-center lh-sm"><div className="align-self-center"><h6>There are no products in your cart</h6></div></div>}
                             <li className="list-group-item d-flex justify-content-between">
                                 <span>Total</span>
-                                <strong>{totalPrice ? totalPrice : 0} ₴</strong>
+                                <strong>{totalPrice ? totalDiscount ? totalPrice - (totalPrice * totalDiscount/100) : totalPrice : 0} ₴</strong>
                             </li>
                         </ul>
                     </div>
@@ -174,9 +191,33 @@ class Cart extends React.Component<CartComponentProps,CartState>{
                                     <label htmlFor="phone" className="form-label">Phone number</label>
                                     <input type="email" className="form-control" value={this.state.customerDetails.phone_number} disabled={this.props.auth.token.length ? true : false} onChange={this.handlePhoneNumberChange}></input>
                                 </div>
-                                <button className="w-100 btn btn-primary btn-lg">Checkout</button>
                             </div>
                         </form>
+                        <hr/>
+                        <h4 className="mb-3">Payment</h4>
+                        <div className="row gy-3">
+                            <div className="col-md-6">
+                                <label className="form-label">Name on card</label>
+                                <input type="text" className="form-control" />
+                                <small className="text-muted">Full name as displayed on card</small>
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label">Credit card number</label>
+                                <input type="text" className="form-control" />
+                            </div>
+                            <div className="col-md-3">
+                                <label className="form-label">Expiration</label>
+                                <input type="text" className="form-control" />
+                            </div>
+                            <div className="col-md-3">
+                                <label className="form-label">CVV</label>
+                                <input type="password" className="form-control" />
+                            </div>
+                        </div>
+                        <hr/>
+                        <div className="d-flex justify-content-center">
+                            <button className="w-75 btn btn-primary btn" disabled={this.state.cart.length ? false : true}>Checkout</button>
+                        </div>
                     </div>
                 </div>
             </div> 

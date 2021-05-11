@@ -89,25 +89,14 @@ export default class CategoryService {
         return result;
     }
     updateCategoryById = async (id : string,updatedCategory : IUpdateCategory) : Promise<ICategory> => {
-        // const data = new FormData();
+        const data = new FormData();
 
-        // data.append("title",updatedCategory.title);
-        // data.append("description",updatedCategory.description);
-        // data.append("category_image",updatedCategory.category_image);
-    
-        const request = {
-            "title" : updatedCategory.title,
-            "description" : updatedCategory.description,
-            "category_image" : updatedCategory.category_image
-        }
-        
-        const data  = JSON.stringify(request);
+        data.append("title",updatedCategory.title!);
+        data.append("description",updatedCategory.description!);
+        data.append("category_image",updatedCategory.category_image!);
 
         const requestOptions = {
             method : "PUT",
-            header : {
-                'Content-Type': 'application/json'
-            },
             body : data
         }
 

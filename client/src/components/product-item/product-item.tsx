@@ -5,6 +5,7 @@ interface ProductProps{
     id : string;
     title : string;
     price : string;
+    discount : string;
     image : string;
 }
 
@@ -41,7 +42,7 @@ export default class ProductItem extends React.Component<ProductProps,ProductSta
                                     <div className="btn-group">
                                         <button type="button" className="btn btn-sm btn-outline-secondary" onClick={this.redirectHandle}>{this.state.redirect ? <Redirect to={`/product/${this.props.id}`}/> : "Learn more..."}</button>
                                     </div>
-                                    <p className="card-text"><b>Price: <span className="text-primary">{this.props.price}</span> ₴</b></p>
+                                    <p className="card-text"><b>Price: <span className="text-primary">{this.props.discount ? +this.props.price - ((+this.props.price) * (+this.props.discount/100)) : this.props.price}</span> ₴</b> <span className="text-decoration-line-through text-danger">{+this.props.discount ? this.props.price : null} ₴</span></p>
                                 </div>
                             </div>
                         </div>

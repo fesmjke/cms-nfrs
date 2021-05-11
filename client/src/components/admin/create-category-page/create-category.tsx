@@ -82,13 +82,10 @@ export default class CreateCategoryPage extends React.Component<{},CreateCategor
         }
     }
 
-    onClickUpdate = async (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault()
+    onClickUpdate = async () => {
         if(this.state.uploadedFile && this.state.current_category.title && this.state.current_category.description){
-            console.log("FIRST")
             const result = await this._categoryService.updateCategoryById(this.state.current_category._id,{category_image : this.state.uploadedFile,description : this.state.current_category.description,title : this.state.current_category.title});
         }else{
-            console.log("SECOND")
             const result = await this._categoryService.updateCategoryById(this.state.current_category._id,{category_image : undefined,description : this.state.current_category.description,title : this.state.current_category.title});
         }
     }

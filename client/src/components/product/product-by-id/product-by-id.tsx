@@ -150,7 +150,7 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
                             <div className="card-body">
                                 <h3 className="card-title mb-4">{this.state.product.title}</h3>
                                 <hr></hr>
-                                <h4 className="card-text"><span className="text-">Price</span>: {this.state.product.price}₴</h4>
+                                <h4 className="card-text"><span className="text-">Price</span>: {this.state.product.discount ? +this.state.product.price - ((+this.state.product.price) * (+this.state.product.discount/100)) : this.state.product.price}₴ <span className="text-decoration-line-through text-danger">{+this.state.product.discount ? this.state.product.price : null} ₴</span></h4>
                                 <p className="card-text mt-4">
                                     {this.state.product.description}
                                 </p>
