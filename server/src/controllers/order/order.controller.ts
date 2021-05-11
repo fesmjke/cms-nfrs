@@ -1,5 +1,8 @@
 import { FastifyRequest,FastifyReply } from "fastify";
+import MailService from "../../services/mail/mail.service";
 import { orderService } from "../../services/order/order.service";
+import {productModel} from "../../model/product/product.model";
+import { ProductService } from "../../services/product/product.service";
 import { IController } from "../../types/interfaces/controller";
 import { IService } from "../../types/interfaces/service";
 import { DeleteOrderIdRequest, GetOrderIdRequest, PostOrderRequest, UpdateOrderRequest } from "../../types/requests/order";
@@ -8,16 +11,22 @@ import { ErrorController } from "../error/error.controller";
 
 class OrderController implements IController {
     private _orderService : IService;
+    private _mailService : MailService;
+    private _productService : ProductService;
     private _errorController;
 
     constructor(orderService : IService) { 
         this._orderService = orderService;
+        this._mailService = new MailService();
+        this._productService = new ProductService(productModel);
         this._errorController = new ErrorController();
     }
 
     public create = async (request : PostOrderRequest,reply : FastifyReply) => {
         try{
             const createdOrder = await this._orderService.create(request.body);
+            const activationsKeys = await this._productService.getActivationsCodes(request.body.products);
+            this._mailService.sendEmail("",activationsKeys);
             reply.code(201).header('Content-Type','application/json; charset=utf-8').send(createdOrder);
         }catch(err){
             this._errorController.errorClassifier(err,reply);

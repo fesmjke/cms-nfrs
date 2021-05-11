@@ -21,6 +21,18 @@ class ProductModel {
         }
     }
 
+    getActivationsCodes = async (products : string[]) : Promise<string[]> => {
+        const codes : string[] = [];
+
+        for (const product of products) {
+            const code = await this.removeAndReturnCodeFromProduct(product);
+            console.log("async for each",code);
+            if(code) codes.push(code)
+        }
+
+        return codes;
+    }
+
     addActivationCodes = async (id : string | number | ObjectId,codes : string[]) : Promise<IProduct | null> => {
         const product = await this.getById(id);
         if(product){
@@ -32,6 +44,21 @@ class ProductModel {
         }else{
             return product // null
         }
+    }
+
+    removeAndReturnCodeFromProduct = async (id : string) => {
+        const product = await this.getById(id);
+
+        if(product){
+            if(product.activation_code.length === 0){
+                return null
+            }
+            const productCode = product.activation_code.pop();
+            await this.updateById(id,product);
+            return productCode
+        }
+
+        return null
     }
 
     getByCategoryId = async (id : string | ObjectId) : Promise<IProduct[]> => {

@@ -7,6 +7,7 @@ const OrderSchema = new Schema<IOrderDoc,IOrderModel>({
     last_name : {type : String,required : true},
     email : {type : String,required : true},
     total_price : {type : String,required : true},
+    products : [{type : String,required : true}],
     status : {type : String,required : true},
 },{versionKey : false});
 

@@ -22,7 +22,8 @@
     "fastify-multer": "^2.0.2",
     "fastify-static": "^4.0.1",
     "joi": "^17.4.0",
-    "mongoose": "^5.12.3"
+    "mongoose": "^5.12.3",
+    "nodemailer": "^6.6.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.1",
