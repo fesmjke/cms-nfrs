@@ -6,6 +6,7 @@ export interface IOrder extends Entity{
     last_name : string;
     email : string;
     total_price : string;
+    products : [string];
     status : string;
 }
 
