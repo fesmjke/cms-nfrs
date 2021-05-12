@@ -21,7 +21,9 @@ import { cart24, categories24,home24,info24,products24,user24,logo24 } from "../
 import Cart from "../components/cart";
 import AdminBar from "../components/admin/admin-bar";
 import CreateCategoryPage from "../components/admin/create-category-page";
+import AddCodesPage from "../components/admin/add-codes-page";
 import CreateProductPage from "../components/admin/create-product-page";
+import ProductOrders from "../components/admin/product-orders";
 
 class App extends React.Component<AppComponentProps,{}>{
   constructor(props : AppComponentProps){
@@ -101,12 +103,18 @@ class App extends React.Component<AppComponentProps,{}>{
                  </Route>
               </React.Fragment>
                : this.props.token && this.props.role === "admin" ? <React.Fragment>
-               <Route path="/category-create">
+                    <Route path="/category-create">
                      <CreateCategoryPage/>
                    </Route>
                    <Route path="/product-create">
                     <CreateProductPage/>
-               </Route>
+                    </Route>
+                    <Route path="/product-add-codes">
+                    <AddCodesPage/>
+                    </Route>
+                    <Route path="/product-orders">
+                    <ProductOrders/>
+                    </Route>
              </React.Fragment> : this.props.token && this.props.role === "user" ? <React.Fragment>
                  <Route path="/profile" >
                    <UserProfile />

@@ -5,9 +5,11 @@ import { CategoriesActions, CategoriesActionTypes, ICategoryAnswerLoadSuccess } 
 import { RootState } from "../../store/types";
 import { ICategory } from "../../types/interfaces/category";
 import CategoryItem from "../category-item/category-item";
+import Loader from "../loader";
 
 interface CategoryState {
-    categories : ICategory[]
+    categories : ICategory[],
+    loading : boolean;
 }
 
 class Categories extends React.Component<CategoriesComponentProps,CategoryState>{
@@ -20,14 +22,17 @@ class Categories extends React.Component<CategoriesComponentProps,CategoryState>
 
         this.props.loadCategoriesSuccess({categories : categories})
 
-        this.setState({categories : categories})
+        setTimeout(() => {
+            this.setState({categories : categories,loading : false})
+        },1000);
     }
 
     constructor(props : CategoriesComponentProps){
         super(props);
         this._categoryService = new CategoryService();
         this.state = {
-            categories : []
+            categories : [],
+            loading : true
         }
     }
 
@@ -43,9 +48,9 @@ class Categories extends React.Component<CategoriesComponentProps,CategoryState>
          
         return(
             <div className="container py-5">
-                <h2 className="pb-2 border-bottom">Categories</h2>
+                <h3 className="pb-2 border-bottom">Categories</h3>
                 <div className="row row-cols-4 g-4 py-5">
-                    {categories}
+                    {this.state.loading ? <Loader/> : categories}
                 </div>
             </div>
         )

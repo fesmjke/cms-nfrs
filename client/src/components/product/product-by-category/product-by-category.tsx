@@ -6,9 +6,11 @@ import { IProductAnswerSuccess, ProductActions, ProductActionTypes } from "../..
 import { RootState } from "../../../store/types";
 import { IProduct } from "../../../types/interfaces/product";
 import ProductItem from "../../product-item";
+import Loader from "../../loader";
 
 interface ProductsByCategoryState {
-    products : IProduct[]
+    products : IProduct[],
+    loading : boolean;
 }
 
 interface ProductsByCategoryProps {
@@ -25,20 +27,23 @@ class ProductsByCategory extends React.Component<ProductsByCategoryComponentProp
 
         this.props.loadProductsSuccess({products : products})
 
-        this.setState({products : products})
+        setTimeout(() => {
+            this.setState({products : products,loading : false})
+        },2000)
     }
 
     constructor(props : ProductsByCategoryComponentProps & ProductsByCategoryProps){
         super(props);
         this._productService = new ProductService();
         this.state = {
-            products : []
+            products : [],
+            loading : true
         }
     }
 
     createProducts = () => {
         return this.state.products.map((product : IProduct) => {
-            return <ProductItem discount={product.discount} title={product.title} image={product.image_url} price={product.price} id={product._id}/>
+            return <ProductItem stock={product.activation_code.length} discount={product.discount} title={product.title} image={product.image_url} price={product.price} id={product._id}/>
         })
     }
 
@@ -47,7 +52,17 @@ class ProductsByCategory extends React.Component<ProductsByCategoryComponentProp
 
         return(
             <div className="album py-5">
-                {products.length ? products : <h2>Currently no availiable products in this category...</h2>}
+                
+                <div className="container">
+                <h3>Products</h3>
+                <hr/>
+                <div className="row">
+
+                    {this.state.loading ? <Loader/> : products.length ? products : <h2>Currently no availiable products in this category...</h2>}
+
+                </div>
+                </div>
+
             </div>
         )
     }

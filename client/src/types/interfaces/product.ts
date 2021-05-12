@@ -4,6 +4,7 @@ export interface IProduct {
     price : string;
     discount : string;
     description : string;
+    activation_code : string[];
     developer : string;
     category : string;
     reviewies : [{

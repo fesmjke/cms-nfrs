@@ -4,10 +4,12 @@ import ProductService from "../../../services/product.service";
 import { IProductAnswerSuccess, ProductActions, ProductActionTypes } from "../../../store/reducers/product/types";
 import { RootState } from "../../../store/types";
 import { IProduct } from "../../../types/interfaces/product";
+import Loader from "../../loader";
 import ProductItem from "../../product-item";
 
 interface ProductsState {
-    products : IProduct[]
+    products : IProduct[],
+    loading : boolean;
 }
 
 class Products extends React.Component<ProductsComponentProps,ProductsState>{
@@ -20,20 +22,23 @@ class Products extends React.Component<ProductsComponentProps,ProductsState>{
 
         this.props.loadProductsSuccess({products : products})
 
-        this.setState({products : products})
+        setTimeout(() => {
+            this.setState({products : products,loading : false})
+        }, 1000);
     }
 
     constructor(props : ProductsComponentProps){
         super(props);
         this._productService = new ProductService();
         this.state = {
-            products : []
+            products : [],
+            loading : true
         }
     }
 
     createProducts = () => {
         return this.state.products.map((product : IProduct) => {
-            return <ProductItem discount={product.discount} title={product.title} image={product.image_url} price={product.price} id={product._id}/>
+            return <ProductItem stock={product.activation_code.length} discount={product.discount} title={product.title} image={product.image_url} price={product.price} id={product._id}/>
         })
     }
 
@@ -42,7 +47,12 @@ class Products extends React.Component<ProductsComponentProps,ProductsState>{
 
         return(
             <div className="album py-5">
-                {products}
+                <div className="row">
+                    <h3>Products</h3>
+                    <hr />
+                    {this.state.loading ? <Loader/> : products}
+                </div>
+                
             </div>
         )
     }

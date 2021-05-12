@@ -133,4 +133,24 @@ export default class ProductService {
 
         return result;
     }
+
+    addNewCode = async (id : string,code : string) => {
+        const codes = [code];
+
+        const requestOptions = {
+            method : "POST",
+            headers : {
+                'Content-Type': 'application/json'
+            },
+            body : JSON.stringify({
+                "codes" : codes
+            })
+        }
+
+        const responce = await fetch(`/api/product/codes/${id}`,requestOptions);
+
+        const result = await responce.json();
+
+        return result;
+    }
 }

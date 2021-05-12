@@ -47,6 +47,7 @@ export default class CreateProductPage extends React.Component<{},CreateProductP
                 title : '',
                 category : '',
                 description : '',
+                activation_code : [''],
                 developer : '',
                 discount : '',
                 image_url : '',
@@ -87,7 +88,7 @@ export default class CreateProductPage extends React.Component<{},CreateProductP
     }
 
     onNewProduct = () => {
-        if (!this.state.newProduct) this.setState({newProduct : true,current_product : {_id : '',category : '',description : '',developer : '',discount : '',image_url : '',price : '',reviewies : [{user_id : '',message : ''}],title : ''}})
+        if (!this.state.newProduct) this.setState({newProduct : true,current_product : {_id : '',activation_code : [''],category : '',description : '',developer : '',discount : '',image_url : '',price : '',reviewies : [{user_id : '',message : ''}],title : ''}})
         else this.setState({newProduct : false})
     }
 
@@ -223,7 +224,7 @@ export default class CreateProductPage extends React.Component<{},CreateProductP
                                     <div className="btn-group">
                                         <button type="button" className="btn btn-sm btn-outline-secondary">Learn more...</button>
                                     </div>
-                                    <p className="card-text"><b>Price: <span className="text-primary">{this.state.current_product.price}</span> ₴</b></p>
+                                    <p className="card-text"><b>Price: <span className="text-primary">{this.state.current_product.discount ? +this.state.current_product.price - ((+this.state.current_product.price) * (+this.state.current_product.discount/100)) : this.state.current_product.price}</span> ₴</b> <span className="text-decoration-line-through text-danger">{+this.state.current_product.discount ? this.state.current_product.price : null} ₴</span></p>
                                 </div>
                             </div>
                         </div>

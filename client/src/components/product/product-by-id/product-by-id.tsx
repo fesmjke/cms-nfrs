@@ -9,6 +9,7 @@ import { IProduct } from "../../../types/interfaces/product";
 import UserService from "../../../services/user.service";
 import ProductItem from "../../product-item";
 import { CartActions, CartActionTypes, IProductInCart, IProductRemove } from "../../../store/reducers/cart/types";
+import Loader from "../../loader";
 
 interface ProductsByIdState {
     product : IProduct,
@@ -21,7 +22,8 @@ interface ProductsByIdState {
         message : string;
     }[]
     redirectToCategory : boolean;
-    isProductInCart : boolean
+    isProductInCart : boolean;
+    loading : boolean;
 }
 
 interface ProductsByIdProps {
@@ -50,7 +52,7 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
 
         this.setState({reviewies : reviewies})
 
-        this.setState({categoryDetails : {title : category.title,id : category._id}})
+        this.setState({categoryDetails : {title : category.title,id : category._id},loading : false})
 
         this.isProductInCart();
     }
@@ -65,6 +67,7 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
                 _id : '',
                 category : '',
                 description : '',
+                activation_code : [''],
                 developer : '',
                 discount : '',
                 image_url : '',
@@ -84,7 +87,8 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
                 title : ''
             },
             redirectToCategory : false,
-            isProductInCart : false
+            isProductInCart : false,
+            loading : true
         }
     }
 
@@ -136,7 +140,7 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
 
         return(
             <div className="container">
-                <div className="row">
+                {!this.state.loading ? <div className="row">
                     <div className="col-lg-3 mt-4">
                         <img src={`/api/static/${this.state.product.image_url}`} className="card-img-top img-fluid" alt=""/>
                         <div className="d-flex justify-content-between align-items-center mt-4">
@@ -150,6 +154,7 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
                             <div className="card-body">
                                 <h3 className="card-title mb-4">{this.state.product.title}</h3>
                                 <hr></hr>
+                                {this.state.product.activation_code.length ? null : <h5 className="card-text text-warning mb-4">Out of stock</h5>}
                                 <h4 className="card-text"><span className="text-">Price</span>: {this.state.product.discount ? +this.state.product.price - ((+this.state.product.price) * (+this.state.product.discount/100)) : this.state.product.price}₴ <span className="text-decoration-line-through text-danger">{+this.state.product.discount ? this.state.product.price : null} ₴</span></h4>
                                 <p className="card-text mt-4">
                                     {this.state.product.description}
@@ -157,7 +162,7 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
                                 {/* <span className="text-warning">{this.state.product.}</span> */}
                                 <div className="d-flex justify-content-between align-items-center mt-4">
                                     <div className="btn-group">
-                                        {this.state.isProductInCart ? <button type="button" className="btn btn-outline-success" onClick={this.handleRemoveFromCart}>Remove from cart</button> : <button type="button" className="btn btn-outline-success" onClick={this.handleAddToCart}>Add to cart</button>}
+                                        {this.state.isProductInCart ? <button type="button" className="btn btn-outline-success" onClick={this.handleRemoveFromCart}>Remove from cart</button> : <button type="button" className="btn btn-outline-success" onClick={this.handleAddToCart} disabled={this.state.product.activation_code.length ? false : true}>Add to cart</button>}
                                     </div>
                                 </div>
                             </div>
@@ -168,8 +173,7 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
                             <button type="button" className="btn btn-success">Leave review</button>
                         </div>
                     </div>
-                </div>
-                {this.props.productId}
+                </div> : <Loader/>}
             </div>
         )
     }
