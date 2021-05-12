@@ -10,6 +10,8 @@ import createCategory24 from "./create-category.png";
 import createProduct24 from "./create-product.png";
 import logo24 from "./mozy.png";
 import logo256 from "./mozy256.png"
+import write24 from "./writing.png";
+import listOrder24 from "./list-order.png";
 
 
 export {
@@ -24,5 +26,7 @@ export {
     createCategory24,
     createProduct24,
     logo24,
-    logo256
+    logo256,
+    write24,
+    listOrder24
 }

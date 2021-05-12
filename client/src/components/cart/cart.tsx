@@ -1,6 +1,7 @@
 import React, { Dispatch } from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { remove24 } from "../../images";
+import OrderService from "../../services/order.service";
 import { CartActions, CartActionTypes, IProductInCart, IProductRemove } from "../../store/reducers/cart/types";
 import { RootState } from "../../store/types";
 
@@ -18,12 +19,23 @@ interface CartState {
         credit_card_number : string;
         card_expiration : string;
         cvv : string;
-    }
+    },
+    paid : {
+        message : string;
+        status : boolean;
+    },
+    error : {
+        message : string;
+        status : boolean;
+    };
 }
 
 class Cart extends React.Component<CartComponentProps,CartState>{
+    private _orderService : OrderService;
+    
     constructor(props : CartComponentProps){
         super(props);
+        this._orderService = new OrderService();
         this.state = {
             cart : [],
             customerDetails : {
@@ -34,6 +46,14 @@ class Cart extends React.Component<CartComponentProps,CartState>{
                 user_name : ''
             },payment : {
                 card_expiration : '',credit_card_number : '',cvv : '',full_name : ''
+            },
+            paid : {
+                message : '',
+                status : false
+            },
+            error : {
+                message : '',
+                status : false
             }
         }
     }
@@ -64,11 +84,28 @@ class Cart extends React.Component<CartComponentProps,CartState>{
             return +product.discount
        })
        return this.props.cart.cart.length ? priceList.reduce((acc,value) => {return acc + value}) : null;
-       
+    }
+
+    clearCart = () => {
+        for (const product of this.state.cart) {
+            this.props.removeFromCart({id : product.id})
+        }
+
+        this.setState({cart : []});
+    }
+
+    clearPayment = () => {
+        this.setState({
+            payment : {
+                full_name : '',
+                card_expiration : '',
+                credit_card_number : '',
+                cvv : ''
+            }
+        })
     }
 
     removeProductFromCart = (id : string) => {
-        console.log("CLICKED")
         this.props.removeFromCart({id : id})
         
         const pos = this.state.cart.map((product) => {return product.id}).indexOf(id);
@@ -139,6 +176,76 @@ class Cart extends React.Component<CartComponentProps,CartState>{
         })
     }
 
+    private handleNameOnCardChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({payment : {...this.state.payment,full_name : e.target.value}})
+    }
+
+    private handleCardNumberChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({payment : {...this.state.payment,credit_card_number : e.target.value}})
+    }
+
+    private handleCardExpChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({payment : {...this.state.payment,card_expiration : e.target.value}})
+    }
+
+    private handleCardCVVChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({payment : {...this.state.payment,cvv : e.target.value}})
+    }
+
+    checkCardFields = () => {
+        if(this.state.payment.full_name.length <= 1){
+            this.setState({error : {message : "Full name on card should be fully filled!",status : true}});
+            return true
+        }
+        if(this.state.payment.credit_card_number.length != 16){
+            this.setState({error : {message : "Card number should be fully filled!",status : true}});
+            return true
+        }
+        if(this.state.payment.card_expiration.length != 5){
+            this.setState({error : {message : "Expiration date on card should be fully filled! Example : 00/00",status : true}});
+            return true
+        }
+        if(this.state.payment.cvv.length != 3){
+            this.setState({error : {message : "CVV field should be fully filled!",status : true}});
+            return true
+        }
+        return false
+    }
+
+    onOrderClick = async () => {
+        const totalPrice = this.countTotalPrice();
+        const totalDiscount = this.countTotalDiscount();
+
+        const price = totalPrice ? totalDiscount ? totalPrice - (totalPrice * totalDiscount/100) : totalPrice : 0;
+        const productsInCart = this.state.cart.map((product) => {return product.id});
+
+        const error = this.checkCardFields();
+
+        if(!error){
+            if(this.props.auth.profile.id){
+                const answer = await this._orderService.createOrder({email : this.state.customerDetails.email,name : this.state.customerDetails.name,last_name : this.state.customerDetails.last_name,
+                    total_price : price.toString(),products : productsInCart,status : "paid",user_id : this.props.auth.profile.id})
+                if(answer.status === "paid") {
+                    this.clearCart(); 
+                    this.clearPayment();
+                    this.setState({paid : {message : "Order are successfully paid. Please check your email! Have a good day!",status : true}})
+                }else{
+                    this.setState({paid : {message : "Something is going wrong!",status : false}})
+                }
+            }else{
+                const answer = await this._orderService.createOrder({email : this.state.customerDetails.email,name : this.state.customerDetails.name,last_name : this.state.customerDetails.last_name,
+                    total_price : price.toString(),products : productsInCart,status : "paid"})
+                if(answer.status === "paid") {
+                    this.clearCart();
+                    this.clearPayment();
+                    this.setState({paid : {message : "Order are successfully paid. Please check your email! Have a good day!",status : true}})
+                }else{
+                    this.setState({paid : {message : "Something is going wrong!",status : false}})
+                }
+            }
+        }
+    }
+
     render(){
         const listOfProducts = this.createListOfProduct();
         const totalPrice = this.countTotalPrice();
@@ -163,6 +270,7 @@ class Cart extends React.Component<CartComponentProps,CartState>{
                                 <strong>{totalPrice ? totalDiscount ? totalPrice - (totalPrice * totalDiscount/100) : totalPrice : 0} ₴</strong>
                             </li>
                         </ul>
+                        {this.state.error.status ? <h4 className="text-danger">{this.state.error.message}</h4> : <h4 className="text-success">{this.state.paid.message}</h4>}
                     </div>
                     <div className="col-md-7 col-lg-8">
                         <h4 className="mb-3">Customer information</h4>
@@ -198,25 +306,27 @@ class Cart extends React.Component<CartComponentProps,CartState>{
                         <div className="row gy-3">
                             <div className="col-md-6">
                                 <label className="form-label">Name on card</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" onChange={this.handleNameOnCardChange}/>
                                 <small className="text-muted">Full name as displayed on card</small>
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Credit card number</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" onChange={this.handleCardNumberChange}/>
                             </div>
                             <div className="col-md-3">
                                 <label className="form-label">Expiration</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" onChange={this.handleCardExpChange}/>
+                                <small className="text-muted">Example: 00/00</small>
                             </div>
                             <div className="col-md-3">
                                 <label className="form-label">CVV</label>
-                                <input type="password" className="form-control" />
+                                <input type="password" className="form-control" onChange={this.handleCardCVVChange}/>
+                                <small className="text-muted">Your CVV code on card</small>
                             </div>
                         </div>
                         <hr/>
                         <div className="d-flex justify-content-center">
-                            <button className="w-75 btn btn-primary btn" disabled={this.state.cart.length ? false : true}>Checkout</button>
+                            <button className="w-75 btn btn-primary btn" disabled={this.state.cart.length ? false : true} onClick={this.onOrderClick}>Checkout</button>
                         </div>
                     </div>
                 </div>

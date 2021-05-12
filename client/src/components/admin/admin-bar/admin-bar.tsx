@@ -1,7 +1,7 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { Link } from "react-router-dom";
-import { createCategory24, createProduct24 } from "../../../images";
+import { createCategory24, createProduct24,listOrder24,write24 } from "../../../images";
 import { RootState } from "../../../store/types";
 
 class AdminBar extends React.Component<AdminBarComponentProps>{
@@ -9,6 +9,12 @@ class AdminBar extends React.Component<AdminBarComponentProps>{
         return(
             (this.props.role === "admin" ? 
             <React.Fragment>
+                <li>
+                    <Link className="nav-link text-secondary mt-3" to="/product-orders"><img src={listOrder24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Orders</Link>
+                </li>
+                <li>
+                    <Link className="nav-link text-secondary mt-3" to="/product-add-codes"><img src={write24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Add codes</Link>
+                </li>
                 <li>
                     <Link className="nav-link text-secondary mt-3" to="/category-create"><img src={createCategory24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Category create</Link>
                 </li>
