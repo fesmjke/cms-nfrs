@@ -14,9 +14,9 @@ class UserBar extends React.Component<UserBarComponentProps>{
         return(
             <React.Fragment>
                 {this.props.token && this.props.role === "user" ? <React.Fragment>
-                  <li>
+                  {/* <li>
                     <Link className="nav-link text-secondary" to="/profile"><img src={user24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Profile</Link>
-                  </li>
+                  </li> */}
                 </React.Fragment> : null}
             </React.Fragment>
         )

@@ -30,7 +30,7 @@ export default class MailService {
   // send mail with defined transport object
     let info = await transporter.sendMail({
         from: '"Fred Foo 👻" <foo@example.com>', // sender address
-        to: "fatalerror.sm@gmail.com", // list of receivers
+        to: "anysoft@gmail.com", // list of receivers
         subject: "Hello ✔", // Subject line
         text: `Thank you for your recent digital purchase from AnySoft. Details and products keys of this transaction below :?\n\n${formString}`, // plain text body
         html: "<b>Hello world?</b>", // html body

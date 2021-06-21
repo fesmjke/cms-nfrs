@@ -51,9 +51,16 @@ class SignUp extends React.Component<SignUpComponentProps,IStateSignUp> {
         
         if(answer.error){
             this.setState({error : {message : answer.error.message,status : true}})
+            return
         }
 
-        this.setState({success : "You are been successfully registrated!"})
+        this.setState({success : "You are been successfully registrated!",error : {message : '',status : false}})
+        this.setState({user_name : '',
+            name : '',
+            last_name : '',
+            phone_number : '',
+            email : '',
+            password : ''})
     }
 
     private handleUserNameChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -84,46 +91,46 @@ class SignUp extends React.Component<SignUpComponentProps,IStateSignUp> {
     render(){
         return(
             <div className="container p-1 mt-4" style={{maxWidth : "700px"}}>
-                <h2 >Sign Up {this.props.status}</h2>
+                <h2 >Sign Up </h2>
                     <form>
                         <div className="row">
                             <div className="col">
-                                <input name="user_name" className={"form-control ".concat(this.state.user_name.length <= 3 ? "text-danger" : "")} placeholder="Enter your user name" type="text" onChange={this.handleUserNameChange}/>
+                                <input name="user_name" className={"form-control ".concat(this.state.user_name.length <= 3 ? "text-danger" : "")} placeholder="Enter your user name" type="text" onChange={this.handleUserNameChange} value={this.state.user_name}/>
                                 <div className="form-text pt-1">User name should have at least 4 letters.</div>
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row">
                             <div className="col">
-                                <input name="name" className={"form-control ".concat(this.state.name.length <= 4 ? "text-danger" : "")} placeholder="Enter your name" type="text" onChange={this.handleNameChange}/>
+                                <input name="name" className={"form-control ".concat(this.state.name.length <= 4 ? "text-danger" : "")} placeholder="Enter your name" type="text" onChange={this.handleNameChange} value={this.state.name}/>
                                 <div className="form-text pt-1">Your real name.</div>
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row">
                             <div className="col">
-                                <input name="last_name" className={"form-control ".concat(this.state.last_name.length <= 2 ? "text-danger" : "")}  placeholder="Enter your last name" type="text" onChange={this.handleLastNameChange}/>
+                                <input name="last_name" className={"form-control ".concat(this.state.last_name.length <= 2 ? "text-danger" : "")}  placeholder="Enter your last name" type="text" onChange={this.handleLastNameChange} value={this.state.last_name}/>
                                 <div className="form-text pt-1">Your real family name.</div>
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row">
                             <div className="col">
-                                <input name="phone_number" className="form-control" placeholder="Enter your phone number" type="tel" onChange={this.handlePhoneNumberChange} />
+                                <input name="phone_number" className="form-control" placeholder="Enter your phone number" type="tel" onChange={this.handlePhoneNumberChange} value={this.state.phone_number}/>
                                 <div className="form-text pt-1">Your phone number.</div>
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row">
                             <div className="col">
-                                <input name="email" className="form-control" placeholder="Enter your email" type="email" onChange={this.handleEmailChange}/>
+                                <input name="email" className="form-control" placeholder="Enter your email" type="email" onChange={this.handleEmailChange} value={this.state.email}/>
                                 <div className="form-text pt-1">Your email address.</div>
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row">
                             <div className="col">
-                                <input name="password" className={"form-control ".concat(this.state.password.length <= 4 ? "text-danger" : "")}  placeholder="Enter your password" type="password" onChange={this.handlePasswordChange}/>
+                                <input name="password" className={"form-control ".concat(this.state.password.length <= 4 ? "text-danger" : "")}  placeholder="Enter your password" type="password" onChange={this.handlePasswordChange} value={this.state.password}/>
                                 <div className="form-text pt-1">Password should have at least 4 letters.</div>
                             </div>
                         </div>

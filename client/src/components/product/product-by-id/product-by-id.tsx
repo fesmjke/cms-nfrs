@@ -7,7 +7,6 @@ import { IProductAnswerSuccess, ProductActions, ProductActionTypes } from "../..
 import { RootState } from "../../../store/types";
 import { IProduct } from "../../../types/interfaces/product";
 import UserService from "../../../services/user.service";
-import ProductItem from "../../product-item";
 import { CartActions, CartActionTypes, IProductInCart, IProductRemove } from "../../../store/reducers/cart/types";
 import Loader from "../../loader";
 
@@ -20,7 +19,9 @@ interface ProductsByIdState {
     reviewies : {
         user_name : string;
         message : string;
-    }[]
+    }[],
+    user_review : string;
+    send_review : boolean;
     redirectToCategory : boolean;
     isProductInCart : boolean;
     loading : boolean;
@@ -86,6 +87,8 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
                 id : '',
                 title : ''
             },
+            send_review : false,
+            user_review : "",
             redirectToCategory : false,
             isProductInCart : false,
             loading : true
@@ -101,6 +104,14 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
         }))
     }
 
+    sendReview = async () => {
+        await this.setState({send_review : true});
+        console.log(this.state.send_review)
+        await this._productService.addNewReview(this.state.product._id,this.props.auth.profile.id,this.state.user_review);
+        await this.setState({send_review : false});
+        window.location.reload();
+    }
+
     createReaviews = () => {
         return this.state.reviewies.map((review) => {
             return (
@@ -109,6 +120,7 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
                         {review.message}
                     </p>
                     <small className="text-muted">Posted by {review.user_name}</small>
+                    <hr />
                 </div>
             )
         } )
@@ -116,6 +128,10 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
 
     handleRedirectToCategory = () => {
         this.setState({redirectToCategory : true})
+    }
+
+    handleUserReview = (e : React.ChangeEvent<HTMLTextAreaElement>) => {
+        this.setState({user_review : e.target.value})
     }
 
     handleRemoveFromCart = () => {
@@ -130,7 +146,7 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
     }
 
     isProductInCart = () => {
-        if(this.props.cart.filter((product) => product.id === this.state.product._id).length){
+        if(this.props.cart.cart.filter((product) => product.id === this.state.product._id).length){
             this.setState({isProductInCart : true})
         }
     }
@@ -155,7 +171,7 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
                                 <h3 className="card-title mb-4">{this.state.product.title}</h3>
                                 <hr></hr>
                                 {this.state.product.activation_code.length ? null : <h5 className="card-text text-warning mb-4">Out of stock</h5>}
-                                <h4 className="card-text"><span className="text-">Price</span>: {this.state.product.discount ? +this.state.product.price - ((+this.state.product.price) * (+this.state.product.discount/100)) : this.state.product.price}₴ <span className="text-decoration-line-through text-danger">{+this.state.product.discount ? this.state.product.price : null} ₴</span></h4>
+                                <h4 className="card-text"><span className="text-">Price</span>: {this.state.product.discount ? +this.state.product.price - ((+this.state.product.price) * (+this.state.product.discount/100)) : this.state.product.price}₴ {+this.state.product.discount ? <span className="text-decoration-line-through text-danger">{+this.state.product.discount ? this.state.product.price : null} ₴</span> : null}</h4>
                                 <p className="card-text mt-4">
                                     {this.state.product.description}
                                 </p>
@@ -170,7 +186,10 @@ class ProductsById extends React.Component<ProductsByIdComponentProps & Products
                         <div className="card card-outline-secondary my-4">
                             <div className="card-header">Reviews</div>
                                 {reviewies.length ? reviewies : (<div className="card-body">{"At current time,this product don't have any review"}</div>)}
-                            <button type="button" className="btn btn-success">Leave review</button>
+                                <div className="form-group m-2">
+                                    <textarea className="form-control" placeholder="Leave your review here :)" onChange={this.handleUserReview}></textarea>
+                                </div>
+                            <button type="button" className="mt-4 btn btn-success" disabled={this.props.auth.profile.user_name.length > 0 ? false : true} onClick={this.sendReview}>Leave review</button>
                         </div>
                     </div>
                 </div> : <Loader/>}
@@ -189,7 +208,11 @@ const mapDispatchToProps = (dispatch : Dispatch<ProductActions | CartActions>) =
 }
 
 const mapStateToProps = (state : RootState) => {
-    return state.product,state.cart;
+    return {
+        product : state.product,
+        auth : state.auth,
+        cart : state.cart
+    };
 }
 
 const connector = connect(mapStateToProps,mapDispatchToProps);

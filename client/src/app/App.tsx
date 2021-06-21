@@ -41,9 +41,7 @@ class App extends React.Component<AppComponentProps,{}>{
                 <li>
                   <Link className="nav-link text-secondary" to="/"><img src={home24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Home</Link>
                 </li>
-                <li>
-                  <Link className="nav-link text-secondary" to="/about"><img src={info24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>About</Link>
-                </li>
+                
                 <li>
                   <Link className="nav-link text-secondary" to="/categories"><img src={categories24} className="bi d-block mx-auto mb-1" style={{width : "24px",height : "24px"}}/>Categories</Link>
                 </li>

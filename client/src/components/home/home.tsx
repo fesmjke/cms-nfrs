@@ -1,7 +1,30 @@
 import React from "react";
+import { Link, Redirect } from "react-router-dom";
 import { logo256 } from "../../images";
 
-export default class Home extends React.Component{
+interface HomeState {
+    redirect : boolean;
+}
+
+export default class Home extends React.Component<{},HomeState>{
+    
+    constructor(props : any){
+        super(props);
+        this.state = {
+            redirect : false   
+        }
+    }
+
+    redirect = () => {
+        this.setState({redirect : true})
+    }
+
+    renderRedirect = () => {
+        if(this.state.redirect){
+            return <Redirect to="/categories"></Redirect>
+        }
+    }
+    
     render(){
         return(
             <div className="px-4 py-5 my-5 text-center">
@@ -20,11 +43,10 @@ export default class Home extends React.Component{
                     <h5 className="mb-4">
                         Wide choice
                     </h5>
-                    <div className="d-grid d-sm-flex justify-content-centre">
-                        <button className="w-50 btn btn-primary">Learn more about us...</button>
+                    <div className="d-grid d-sm-flex justify-content-center">
                         <span className="m-3"></span>
-                        <button className="w-50 btn btn-primary">Start browse software now!</button>
-                    </div>
+                        <button className="w-50 btn btn-primary" onClick={this.redirect}>{this.renderRedirect()}Start browse software now!</button>
+                    </div> 
                 </div>
             </div>
         )

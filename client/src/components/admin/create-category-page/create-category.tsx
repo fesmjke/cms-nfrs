@@ -61,7 +61,7 @@ export default class CreateCategoryPage extends React.Component<{},CreateCategor
 
     onCreateStatus = () => {
         if(!this.state.onCreateStatus)
-            this.setState({onCreateStatus : true});
+            this.setState({onCreateStatus : true,current_category : {_id : '',description : '',image_path : '',title : ''}});
         else
             this.setState({onCreateStatus : false});
     }
@@ -164,7 +164,7 @@ export default class CreateCategoryPage extends React.Component<{},CreateCategor
                     {this.state.onCreateStatus ? <div className="col-lg-3">
                         <h4 className="mt-3">Category preview</h4>
                         <div className="col d-flex align-items-start p-3 shadow">
-                            <img src={this.state.fileUploaded ? URL.createObjectURL(this.state.uploadedFile) : ""} alt="" />
+                            <img src={this.state.fileUploaded ? URL.createObjectURL(this.state.uploadedFile) : ""} alt="" style={{maxWidth : "70px",maxHeight : "70px",minWidth : "70px",minHeight : "70px"}}/>
                             <div>
                                 <h4 className="fw-bold m-2">
                                     {this.state.current_category.title}

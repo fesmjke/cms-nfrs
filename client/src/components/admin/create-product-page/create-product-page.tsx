@@ -25,7 +25,7 @@ export default class CreateProductPage extends React.Component<{},CreateProductP
         const loadedCategories = await this._categoryService.loadCategories();
         const loadedProducts = await this._productService.loadProducts();
 
-        this.setState({categories : loadedCategories});
+        this.setState({categories : loadedCategories,categorySelectedTitle : loadedCategories[0].title});
         this.setState({products : loadedProducts});
     }
 
@@ -64,6 +64,7 @@ export default class CreateProductPage extends React.Component<{},CreateProductP
     
     onAddProduct = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const category = this.state.categories.filter((category) => {return category.title === this.state.categorySelectedTitle})[0];
+
         if(this.state.current_product.title && this.state.current_product.description && this.state.current_product.developer
              && this.state.current_product.discount && this.state.current_product.price && this.state.categorySelectedTitle && this.state.uploadedFile){
                 this._productService.createNewProduct({...this.state.current_product,image_url : this.state.uploadedFile,category : category._id})

@@ -76,7 +76,6 @@ class SignIn extends React.Component<SignInComponentProps,SignInState>{
     render(){
         return(
             <div className="container p-5" style={{maxWidth : "700px"}}>
-                {this.props.status}
                 <h2>Sign In</h2>
                 <form>
                     <div className="row p-2">

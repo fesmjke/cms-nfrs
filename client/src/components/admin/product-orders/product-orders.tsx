@@ -29,7 +29,8 @@ export default class ProductOrders extends React.Component<{},ProductOrdersState
 
     calculateTotalProfit = () => {
         const profit = this.state.orders.map((order) => {
-            return +order.total_price;
+            if(order.status == "paid") return +order.total_price;
+            else return 0
         })
         return this.state.orders.length ? profit.reduce((acc,value) => {return acc + value}) : null;
     }

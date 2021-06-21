@@ -74,12 +74,7 @@ export default class ProductService {
         data.append('developer',product.developer)
         data.append('activation_code','[]')
         data.append('category',product.category)
-
-        console.log(product);
-
-        console.log(data);
-
-
+        
         const requestOptions = {
             method : "POST",
             body : data
@@ -148,6 +143,26 @@ export default class ProductService {
         }
 
         const responce = await fetch(`/api/product/codes/${id}`,requestOptions);
+
+        const result = await responce.json();
+
+        return result;
+    }
+
+    addNewReview = async (product_id : string,user_id : string,review : string) => {
+        const requestOptions = {
+            method : "POST",
+            headers : {
+                'Content-Type': 'application/json'
+            },
+            body : JSON.stringify({
+                rating : 0,
+                user_id : user_id,
+                message : review
+            })
+        }
+
+        const responce = await fetch(`/api/product/review/${product_id}`,requestOptions);
 
         const result = await responce.json();
 
