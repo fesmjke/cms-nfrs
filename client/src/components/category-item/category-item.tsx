@@ -26,7 +26,7 @@ export default class CategoryItem extends React.Component<ICategoryItemProps,ICa
     
     render(){
         const categoryItem = (
-        <div className="col d-flex align-items-start p-3 m-2 shadow" key={this.props.id}>
+        <div className="col-3 p-3 m-4 shadow" key={this.props.id}>
             <img src={`/api/static/${this.props.image_path}`} alt="" style={{maxWidth : "70px",maxHeight : "70px",minWidth : "70px",minHeight : "70px"}}/>
             <div onClick={() => { return <Redirect to={`/products/category/${this.props.id}`}/> }}>
                 <h4 className="fw-bold m-2">

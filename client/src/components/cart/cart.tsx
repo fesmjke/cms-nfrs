@@ -228,6 +228,7 @@ class Cart extends React.Component<CartComponentProps,CartState>{
                 if(answer.status === "paid") {
                     this.clearCart(); 
                     this.clearPayment();
+                    this.setState({error : {message : "",status : false}});
                     this.setState({paid : {message : "Order are successfully paid. Please check your email! Have a good day!",status : true}})
                 }else{
                     this.setState({paid : {message : "Something is going wrong!",status : false}})
@@ -238,6 +239,7 @@ class Cart extends React.Component<CartComponentProps,CartState>{
                 if(answer.status === "paid") {
                     this.clearCart();
                     this.clearPayment();
+                    this.setState({error : {message : "",status : false}});
                     this.setState({paid : {message : "Order are successfully paid. Please check your email! Have a good day!",status : true}})
                 }else{
                     this.setState({paid : {message : "Something is going wrong!",status : false}})

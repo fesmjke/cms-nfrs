@@ -38,7 +38,6 @@ class Categories extends React.Component<CategoriesComponentProps,CategoryState>
 
     createCategories = () => {
         return this.state.categories.map((category : ICategory) => {
-            console.log(category._id)
             return <CategoryItem id={category._id} title={category.title} description={category.description} image_path={category.image_path}/>
         })
     }
@@ -49,7 +48,7 @@ class Categories extends React.Component<CategoriesComponentProps,CategoryState>
         return(
             <div className="container py-5">
                 <h3 className="pb-2 border-bottom">Categories</h3>
-                <div className="row row-cols-4 g-4 py-5">
+                <div className="row row-cols-3 justify-content-center">
                     {this.state.loading ? <Loader/> : categories}
                 </div>
             </div>

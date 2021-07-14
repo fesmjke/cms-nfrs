@@ -72,7 +72,7 @@ export default class ProductService {
         data.append('description',product.description)
         data.append('product_image',product.image_url!)
         data.append('developer',product.developer)
-        data.append('activation_code','[]')
+        data.append('activation_code','aaaaa-aaaaa-aaaaa-aaaaa-aaaaa')
         data.append('category',product.category)
         
         const requestOptions = {
