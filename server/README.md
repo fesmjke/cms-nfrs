@@ -1,3 +1,3 @@
-# server side part
+# Server side part
 
-based on fastify,and ...
+Based on node.js,fastify,mongodb.
